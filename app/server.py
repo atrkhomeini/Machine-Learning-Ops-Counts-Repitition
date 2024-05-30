@@ -1,32 +1,30 @@
 from fastapi import FastAPI
 import joblib
-import pandas as pd
 import numpy as np
-import datetime
 
 model = joblib.load('app/model.joblib')
 
+class_names = np.array(['setosa', 'versicolor', 'virginica'])
+
 app = FastAPI()
+
 @app.get('/')
-def index():
-    return {'message': 'Hello, World!'}
+def read_root():
+    return {'message': 'Iris model API'}
 
 @app.post('/predict')
-def grab_large_iced_americano():
-    # Get the current time
-    now = datetime.datetime.now()
+def predict(data: dict):
+    """
+    Predicts the class of a given set of features.
 
-    # Check if the current time is between 7:00am and 9:00am
-    if 7 <= now.hour <= 9:
-        # Filter the data to get the large iced Americano
-        large_iced_americano = print("Its Time to grab Large Iced Americano")
-        return large_iced_americano
-    else:
-        return None
+    Args:
+        data (dict): A dictionary containing the features to predict.
+        e.g. {"features": [1, 2, 3, 4]}
 
-# Call the function
-result = grab_large_iced_americano()
-if result is not None:
-    print(result.head(1))
-else:
-    print("It's not between 7:00am and 9:00am. Pick another menu!")
+    Returns:
+        dict: A dictionary containing the predicted class.
+    """        
+    features = np.array(data['features']).reshape(1, -1)
+    prediction = model.predict(features)
+    class_name = class_names[prediction][0]
+    return {'predicted_class': class_name}
