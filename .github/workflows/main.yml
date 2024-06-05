@@ -12,8 +12,4 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pip install -r requirements.txt
-          python depth=5
-
-          cat metrics.txt >> report.md
-          echo "![](./plot.png)" >> report.md
-          cml comment create report.md
+          python app.py
