@@ -13,3 +13,13 @@ jobs:
         run: |
           pip install -r requirements.txt
           python src/data/make_dataset.py
+      - name: Remove Outliers
+        run: |
+          python features/remove_outliers.py
+      - name: Train Model
+        run: |
+          python models/train_model.py
+      - name: Counting and Predict Reps
+        run: |
+          python features/count_repetitions.py
+          
