@@ -12,4 +12,4 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pip install -r requirements.txt
-          python app.py
+          python /src/data/make_dataset.py
