@@ -1,0 +1,25 @@
+name: model-training
+on: [push]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+      - uses: iterative/setup-cml@v1
+      - name: Make Dataset
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pip install -r requirements.txt
+          python src/data/make_dataset.py
+      - name: Remove Outliers
+        run: |
+          python features/remove_outliers.py
+      - name: Train Model
+        run: |
+          python models/train_model.py
+      - name: Counting and Predict Reps
+        run: |
+          python features/count_repetitions.py
+          
